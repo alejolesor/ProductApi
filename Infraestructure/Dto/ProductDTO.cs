@@ -5,20 +5,20 @@ using System.Text;
 
 namespace Infraestructure.Dto
 {
-    [Table("protuct")]
+    [Table("product")]
     public class ProductDto
     {
         [Column("id")]
         public int Id { get; set; }
-        [Column("nombre")]
+        [Column("name")]
         public string Name { get; set; }
-        [Column("descripcion")]
+        [Column("description")]
         public string Description { get; set; }
-        [Column("categoria")]
+        [Column("category")]
         public string Category { get; set; }
-        [Column("precio")]
+        [Column("price")]
         public decimal Price { get; set; }
-        [Column("cantidad inicial")]
+        [Column("stock")]
         public int Stock { get; set; }
     }
 }

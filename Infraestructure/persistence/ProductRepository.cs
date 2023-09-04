@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Infraestructure.persistence
 {
@@ -66,7 +67,7 @@ namespace Infraestructure.persistence
         public async Task<bool> Update(IProduct product)
         {
             var productDto = new ProductDto()
-            { Name = product.Name, Description = product.Description, Category = product.Category, Price = product.Price, Stock = product.Stock };
+            { Id = product.Id, Name = product.Name, Description = product.Description, Category = product.Category, Price = product.Price, Stock = product.Stock };
 
             _apiDbContext.productDto.Update(productDto);
             var update = await _apiDbContext.SaveChangesAsync();
@@ -96,7 +97,24 @@ namespace Infraestructure.persistence
 
         public IProduct ConvertDtotoDomain(ProductDto productDto)
         {
-            return new ProductDomain() { Name = productDto.Name, Description = productDto.Description, Category = productDto.Category, Price = productDto.Price, Stock = productDto.Stock };
+            return new ProductDomain() { Id = productDto.Id, Name = productDto.Name, Description = productDto.Description, Category = productDto.Category, Price = productDto.Price, Stock = productDto.Stock };
+        }
+
+
+        public async Task<List<IProduct>> GetProducts()
+        {
+            var productList = new List<IProduct>();
+            var products = await _apiDbContext.productDto.ToListAsync();
+
+            if (products == null)
+                return null;
+
+            foreach (var item in products)
+            {
+                productList.Add(new ProductDomain { Id = item.Id, Name = item.Name , Category = item.Category, Description = item.Description,Price = item.Price, Stock = item.Stock });
+            }
+
+            return productList;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System;
 using Application.InterfacesApplication;
 using Infraestructure.Dto;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ProductManagement.Api.Controllers
 {
@@ -29,7 +30,7 @@ namespace ProductManagement.Api.Controllers
         {
             try
             {
-                var create = await _productUseCase.CreateProduct(_productUseCase.CreateProductDomain(productRequest.Name, productRequest.Description, productRequest.Category, productRequest.Price, productRequest.Stock));
+                var create = await _productUseCase.CreateProduct(_productUseCase.CreateProductDomain(productRequest.Id ,productRequest.Name, productRequest.Description, productRequest.Category, productRequest.Price, productRequest.Stock));
                 if (create)
                 {
                     var result = new Result()
@@ -57,7 +58,25 @@ namespace ProductManagement.Api.Controllers
         public async Task<IActionResult> GetProduct(string name, int price1, int price2)
         {
             var user = await _productUseCase.GetProduct(name, price1, price2);
-            return Ok(user);
+            if (user != null)
+            {
+                return Ok(user);
+            }
+
+            return BadRequest("product not found");
+        }
+
+        [HttpGet]
+        [Route("/get-products")]
+        public async Task<IActionResult> GetProducts()
+        {
+            var user = await _productUseCase.GetProducts();
+            if (user != null)
+            {
+                return Ok(user);
+            }
+
+            return BadRequest("products not found");
         }
 
         [HttpPut]
@@ -66,7 +85,7 @@ namespace ProductManagement.Api.Controllers
         {
             try
             {
-                var update = await _productUseCase.UpdateProduct(_productUseCase.CreateProductDomain(productRequest.Name, productRequest.Description, productRequest.Category, productRequest.Price, productRequest.Stock));
+                var update = await _productUseCase.UpdateProduct(_productUseCase.CreateProductDomain(productRequest.Id, productRequest.Name, productRequest.Description, productRequest.Category, productRequest.Price, productRequest.Stock));
                 if (update)
                 {
                     var result = new Result()

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Application.UseCases.product
 {
@@ -18,9 +19,9 @@ namespace Application.UseCases.product
             _productRepository = productRepository;
         }
 
-        public ProductDomain CreateProductDomain(string name, string descripcion, string categoria, decimal precio, int cantidadInicial)
+        public ProductDomain CreateProductDomain(int id, string name, string descripcion, string categoria, decimal precio, int cantidadInicial)
         {
-            return new ProductDomain() { Name = name, Description = descripcion, Category = categoria, Price = precio, Stock = cantidadInicial };
+            return new ProductDomain() {Id = id,  Name = name, Description = descripcion, Category = categoria, Price = precio, Stock = cantidadInicial };
         }
 
         public async Task<bool> CreateProduct(IProduct product)
@@ -37,25 +38,39 @@ namespace Application.UseCases.product
         {
             var productDomain = await _productRepository.GetProductByName(name, price1, price2);
             if (productDomain == null)
-                throw new KeyNotFoundException("product not found");
+                return null;
             return productDomain;
         }
 
         public async Task<bool> UpdateProduct(IProduct product)
         {
             //open/close principle and polymorphism
-            var productExist = await _productRepository.GetProductByName(product.Name, 0, 0);
-            if (productExist != null) throw new ApplicationException("product exists");
-            var result = await _productRepository.Update(product);
+            var productExist = await _productRepository.GetProductById(product.Id);
+            if (productExist == null) throw new ApplicationException("product is not exists");
+                productExist.Name = product.Name;
+                productExist.Description = product.Description;
+                productExist.Category = product.Category;
+                productExist.Price = product.Price;
+                productExist.Stock = product.Stock;
+                    
+            var result = await _productRepository.Update(productExist);
             if (result) return true;
             return false;
         }
-
+        
         public async Task<bool> DeleteProduct(int id)
         {
             var result = await _productRepository.Delete(id);
             if (result) return true;
             return false;
+        }
+
+        public async Task<List<IProduct>> GetProducts()
+        {
+            var productDomain = await _productRepository.GetProducts();
+            if (productDomain == null)
+                return null;
+            return productDomain;
         }
     }
 }

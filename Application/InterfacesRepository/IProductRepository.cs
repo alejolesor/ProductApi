@@ -15,6 +15,8 @@ namespace Application.InterfacesRepository
 
         Task<IProduct> GetProductByName(string name, int price1, int price2);
 
+        Task<List<IProduct>> GetProducts();
+
         Task<bool> Update(IProduct product);
         Task<bool> Delete(int id);
     }
