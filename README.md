@@ -4,7 +4,8 @@
 
 Candidate Architecture (Clean Architecture and DDD)
 
-![image](https://user-images.githubusercontent.com/10835457/235828011-0a51ab4d-2d2e-4dca-b8d2-a92291df23c4.png)
+![image](https://github.com/alejolesor/ProductApi/assets/10835457/48585791-b291-4ae5-88f4-8f9059c10ee2)
+
 
 The application was configured in docker containers to have easy access to its use and deployment it.
 
@@ -31,3 +32,6 @@ To run the application you can follow the following steps:
 ![image](https://github.com/alejolesor/ProductApi/assets/10835457/71740df9-36cb-45d0-bada-2292d8fec4d0)
 
 ![image](https://github.com/alejolesor/ProductApi/assets/10835457/231d5363-8fd6-4620-b1bf-74aac5a681e2)
+
+
+execute test with postman
