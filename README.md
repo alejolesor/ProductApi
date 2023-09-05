@@ -26,3 +26,8 @@ To run the application you can follow the following steps:
    
    a)` docker-compose build`
    b) `docker-compose up -d`
+
+
+![image](https://github.com/alejolesor/ProductApi/assets/10835457/71740df9-36cb-45d0-bada-2292d8fec4d0)
+
+![image](https://github.com/alejolesor/ProductApi/assets/10835457/231d5363-8fd6-4620-b1bf-74aac5a681e2)
