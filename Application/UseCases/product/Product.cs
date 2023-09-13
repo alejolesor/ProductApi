@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Events;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -21,13 +22,13 @@ namespace Application.UseCases.product
 
         public ProductDomain CreateProductDomain(int id, string name, string descripcion, string categoria, decimal precio, int cantidadInicial)
         {
-            return new ProductDomain() {Id = id,  Name = name, Description = descripcion, Category = categoria, Price = precio, Stock = cantidadInicial };
+            return new ProductDomain() { Id = id, Name = name, Description = descripcion, Category = categoria, Price = precio, Stock = cantidadInicial };
         }
 
         public async Task<bool> CreateProduct(IProduct product)
         {
             //open/close principle and polymorphism
-            var productExist = await _productRepository.GetProductByName(product.Name, 0,0);
+            var productExist = await _productRepository.GetProductByName(product.Name, 0, 0);
             if (productExist != null) throw new ApplicationException("product exists");
             var result = await _productRepository.Create(product);
             if (result) return true;
@@ -47,17 +48,17 @@ namespace Application.UseCases.product
             //open/close principle and polymorphism
             var productExist = await _productRepository.GetProductById(product.Id);
             if (productExist == null) throw new ApplicationException("product is not exists");
-                productExist.Name = product.Name;
-                productExist.Description = product.Description;
-                productExist.Category = product.Category;
-                productExist.Price = product.Price;
-                productExist.Stock = product.Stock;
-                    
+            productExist.Name = product.Name;
+            productExist.Description = product.Description;
+            productExist.Category = product.Category;
+            productExist.Price = product.Price;
+            productExist.Stock = product.Stock;
+
             var result = await _productRepository.Update(productExist);
             if (result) return true;
             return false;
         }
-        
+
         public async Task<bool> DeleteProduct(int id)
         {
             var result = await _productRepository.Delete(id);
@@ -65,12 +66,27 @@ namespace Application.UseCases.product
             return false;
         }
 
-        public async Task<List<IProduct>> GetProducts()
+        public async Task<IEnumerable<ProductByCategory>> GetProducts()
         {
+            List<ProductByCategory> productByCategory = new List<ProductByCategory>();
             var productDomain = await _productRepository.GetProducts();
-            if (productDomain == null)
+   
+
+            var group = from product in productDomain
+                        group product by product.Category into newGroup
+                        select new ProductByCategory
+                        {
+                            Id = newGroup.First().Id,
+                            Name = newGroup.First().Name,
+                            AvailableStock = newGroup.Sum(s => s.Stock),
+                            Descripcion = newGroup.First().Description
+                        };
+
+
+
+            if (group == null)
                 return null;
-            return productDomain;
+            return group;
         }
     }
 }

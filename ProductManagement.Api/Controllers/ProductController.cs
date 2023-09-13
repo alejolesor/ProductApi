@@ -4,6 +4,8 @@ using System;
 using Application.InterfacesApplication;
 using Infraestructure.Dto;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Application.UseCases;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProductManagement.Api.Controllers
 {

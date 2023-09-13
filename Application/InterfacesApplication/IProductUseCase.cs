@@ -12,7 +12,7 @@ namespace Application.InterfacesApplication
         Task<bool> CreateProduct(IProduct product);
         ProductDomain CreateProductDomain(int id, string name, string descripcion, string categoria, decimal precio, int cantidadInicial);
         Task<IProduct> GetProduct(string name, int price1, int price2);
-        Task<List<IProduct>> GetProducts();
+        Task<IEnumerable<ProductByCategory>> GetProducts();
         Task<bool> UpdateProduct(IProduct product);
         Task<bool> DeleteProduct(int id);
     }

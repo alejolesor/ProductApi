@@ -14,4 +14,14 @@ namespace Domain.Events
         public decimal Price { get; set; }
         public int Stock { get; set; }
     }
+
+
+    public class ProductByCategory
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int AvailableStock { get; set; }
+        public string Descripcion { get; set; }
+
+    }
 }
